@@ -1,23 +1,17 @@
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer, RTCConfiguration
 import av
+import cv2
 import os
+from cvzone.PoseModule import PoseDetector
+import cvzone
 import logging
-
-try:
-    import cv2
-    from cvzone.PoseModule import PoseDetector
-    import cvzone
-except ImportError as e:
-    st.error(f"Failed to import necessary modules. {e}")
-    st.stop()
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
 
 # Paths to the resources
 button_r_path = "button.png"
-button_l_path = "button.png"
 shirt_path = "Shirts"
 
 # Ensure resource files are in the correct path
@@ -25,37 +19,94 @@ if not os.path.exists(button_r_path) or not os.path.exists(shirt_path):
     st.error("Resource files not found. Make sure button.png and Shirts directory are uploaded.")
     st.stop()
 
-# Load button images
-try:
-    button_r = cv2.imread(button_r_path, cv2.IMREAD_UNCHANGED)
-    button_l = cv2.flip(button_r, 1)
-    logging.debug("Loaded button images successfully.")
-except Exception as e:
-    st.error(f"Error loading button images: {e}")
-    logging.error(f"Error loading button images: {e}")
-    st.stop()
+# Load shirt images from the directory
+def load_shirts(shirt_path):
+    shirts = []
+    for filename in os.listdir(shirt_path):
+        if filename.endswith(".png"):
+            shirt_info = {
+                "image": os.path.join(shirt_path, filename),
+                "price": 500  # Replace with actual price logic if available
+            }
+            shirts.append(shirt_info)
+    return shirts
 
-# Define shirt information (image filenames and prices)
-shirt_info = [
-    {"image": "1.png", "price": "₹500"},
-    {"image": "2.png", "price": "₹750"},
-    {"image": "3.png", "price": "₹600"},
-    {"image": "4.png", "price": "₹500"},
-    {"image": "5.png", "price": "₹750"},
-    {"image": "6.png", "price": "₹600"},
-]
+shirts = load_shirts(shirt_path)
 
 # Initialize pose detector
 detector = PoseDetector()
 logging.debug("PoseDetector initialized.")
 
-# Define the VideoProcessor class
+# Streamlit app title and description
+st.title("Virtual Dress Try-On with Webcam")
+st.write("Try on shirts virtually using your webcam!")
+
+# Configure WebRTC for webcam and virtual try-on
+if 'selected_shirt' in st.session_state:
+    st.markdown("# Virtual Try-On")
+    webrtc_streamer(
+        key="example",
+        video_processor_factory=VideoProcessor,
+        rtc_configuration=RTCConfiguration(
+            {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+        ),
+    )
+    logging.debug("WebRTC streamer initialized.")
+
+# Display shirt gallery in three columns
+st.markdown("# Shirt Gallery")
+
+# Calculate number of rows and columns for grid display
+num_cols = 3
+num_rows = (len(shirts) + num_cols - 1) // num_cols
+
+# Distribute shirts evenly across columns
+for row in range(num_rows):
+    cols = st.columns(num_cols)
+    for col, shirt_index in zip(cols, range(row * num_cols, (row + 1) * num_cols)):
+        if shirt_index < len(shirts):
+            shirt = shirts[shirt_index]
+            col.image(cv2.imread(shirt["image"]), caption=f"Price: ₹{shirt['price']}", width=200)
+            if col.button("Try On", key=f"try_on_{shirt_index}"):
+                st.session_state['selected_shirt'] = shirt_index
+                st.experimental_rerun()
+
+# Menu bar with login/signup, about us, and cart functionality
+menu_options = ["Home", "Login/Signup", "About Us", "Cart"]
+selected_option = st.sidebar.selectbox("Menu", menu_options)
+
+if selected_option == "Login/Signup":
+    st.subheader("Login/Signup Section")
+    # Add your login/signup form or integration here
+    st.write("Login/Signup form goes here.")
+elif selected_option == "About Us":
+    st.subheader("About Us")
+    st.write("Hello! My name is Charan.")
+elif selected_option == "Cart":
+    st.subheader("Cart")
+    if len(st.session_state.cart) == 0:
+        st.write("Your cart is empty.")
+    else:
+        for item in st.session_state.cart:
+            st.image(cv2.imread(item['image']), caption=f"Price: ₹{item['price']}", width=200)
+
+# Calculate total price of items in the cart
+total_price = sum(item['price'] for item in st.session_state.cart)
+
+# Display total price and buy button
+st.subheader("Cart Total")
+st.write(f"Total: ₹{total_price}")
+
+if st.button("Buy"):
+    st.success("Purchase successful! Thank you for shopping with us.")
+
+# Define the VideoProcessor class for virtual try-on
 class VideoProcessor:
     def __init__(self):
         self.counter_r = 0
         self.counter_l = 0
         self.img_num = 0
-        self.shirt_info = shirt_info
+        self.shirt_info = shirts
 
     def recv(self, frame):
         logging.debug("Frame received.")
@@ -120,63 +171,10 @@ class VideoProcessor:
                 adjusted_y = 293
                 
                 img = cvzone.overlayPNG(img, button_r, (adjusted_right_x, adjusted_y))
-                img = cvzone.overlayPNG(img, button_l, (adjusted_left_x, adjusted_y))
+                img = cvzone.overlayPNG(img, button_r, (adjusted_left_x, adjusted_y))
                 logging.debug("Buttons overlaid on image.")
             except Exception as e:
                 st.write(f"Error overlaying buttons: {e}")
                 logging.error(f"Error overlaying buttons: {e}")
 
         return av.VideoFrame.from_ndarray(img, format='bgr24')
-
-# Set up Streamlit app
-st.title("Virtual Dress Try-On with Webcam")
-
-# Initialize session state for cart
-if 'cart' not in st.session_state:
-    st.session_state['cart'] = []
-
-# Configure WebRTC for webcam and virtual try-on
-if 'selected_shirt' in st.session_state:
-    st.markdown("# Virtual Try-On")
-    webrtc_streamer(
-        key="example",
-        video_processor_factory=VideoProcessor,
-        rtc_configuration=RTCConfiguration(
-            {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-        ),
-    )
-    logging.debug("WebRTC streamer initialized.")
-
-# Display shirt gallery in three columns
-st.markdown("# Shirt Gallery")
-
-# Calculate number of rows and columns for grid display
-num_cols = 3
-num_rows = (len(shirt_info) + num_cols - 1) // num_cols
-
-# Distribute shirts evenly across columns
-for row in range(num_rows):
-    cols = st.columns(num_cols)
-    for col, shirt_index in zip(cols, range(row * num_cols, (row + 1) * num_cols)):
-        if shirt_index < len(shirt_info):
-            shirt = shirt_info[shirt_index]
-            col.image(os.path.join(shirt_path, shirt["image"]), caption=f"{shirt['price']}", width=200)
-            if col.button("Try On", key=f"try_on_{shirt_index}"):
-                st.session_state['selected_shirt'] = shirt_index
-                st.experimental_rerun()
-            if col.button("Add to Cart", key=f"add_to_cart_{shirt_index}"):
-                st.session_state['cart'].append(shirt)
-                st.experimental_rerun()
-
-# Display cart contents in the sidebar
-st.sidebar.title("Menu")
-st.sidebar.write("## Navigation")
-if st.sidebar.button("About Us"):
-    st.sidebar.write("Charan")
-
-st.sidebar.write("## Cart")
-if st.session_state['cart']:
-    for item in st.session_state['cart']:
-        st.sidebar.write(f"{item['image']} - {item['price']}")
-else:
-    st.sidebar.write("Cart is empty.")
