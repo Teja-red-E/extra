@@ -1,11 +1,16 @@
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer, RTCConfiguration
 import av
-import cv2
 import os
-from cvzone.PoseModule import PoseDetector
-import cvzone
 import logging
+
+try:
+    import cv2
+    from cvzone.PoseModule import PoseDetector
+    import cvzone
+except ImportError as e:
+    st.error(f"Failed to import necessary modules. {e}")
+    st.stop()
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -126,6 +131,10 @@ class VideoProcessor:
 # Set up Streamlit app
 st.title("Virtual Dress Try-On with Webcam")
 
+# Initialize session state for cart
+if 'cart' not in st.session_state:
+    st.session_state['cart'] = []
+
 # Configure WebRTC for webcam and virtual try-on
 if 'selected_shirt' in st.session_state:
     st.markdown("# Virtual Try-On")
@@ -140,10 +149,6 @@ if 'selected_shirt' in st.session_state:
 
 # Display shirt gallery in three columns
 st.markdown("# Shirt Gallery")
-
-# Initialize cart in session state
-if 'cart' not in st.session_state:
-    st.session_state['cart'] = []
 
 # Calculate number of rows and columns for grid display
 num_cols = 3
@@ -163,10 +168,15 @@ for row in range(num_rows):
                 st.session_state['cart'].append(shirt)
                 st.experimental_rerun()
 
-# Display the cart items
-st.markdown("## Cart")
+# Display cart contents in the sidebar
+st.sidebar.title("Menu")
+st.sidebar.write("## Navigation")
+if st.sidebar.button("About Us"):
+    st.sidebar.write("Charan")
+
+st.sidebar.write("## Cart")
 if st.session_state['cart']:
     for item in st.session_state['cart']:
-        st.write(f"{item['image']} - {item['price']}")
+        st.sidebar.write(f"{item['image']} - {item['price']}")
 else:
-    st.write("Cart is empty.")
+    st.sidebar.write("Cart is empty.")
