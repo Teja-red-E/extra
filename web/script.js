@@ -46,6 +46,12 @@ function addToCart(shirtIndex) {
     const cartItem = document.createElement('li');
     cartItem.textContent = `${shirt_info[shirtIndex].name} - ${shirt_info[shirtIndex].price}`;
     cartItems.appendChild(cartItem);
+
+     // Calculate and update cart total
+    const cartTotal = document.getElementById('cart-total');
+    const currentTotal = parseFloat(cartTotal.textContent.replace('Total: ₹', ''));
+    const newTotal = currentTotal + parseFloat(shirt_info[shirtIndex].price.replace('₹', ''));
+    cartTotal.textContent = `Total: ₹${newTotal.toFixed(2)}`;
 }
 
 // Fetch shirts on page load
