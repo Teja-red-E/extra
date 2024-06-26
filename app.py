@@ -36,6 +36,10 @@ logging.debug("PoseDetector initialized.")
 if 'cart' not in st.session_state:
     st.session_state['cart'] = []
 
+def calculate_cart_total():
+    total = sum(float(item['price'].replace('₹', '').replace(',', '')) for item in st.session_state['cart'])
+    return f'₹{total:.2f}'
+
 # Define the VideoProcessor class
 class VideoProcessor:
     def __init__(self):
