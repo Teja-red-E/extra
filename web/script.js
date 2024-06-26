@@ -19,21 +19,35 @@ async function fetchShirts() {
         const tryOnButton = document.createElement('button');
         tryOnButton.textContent = 'Try On';
         tryOnButton.addEventListener('click', () => {
-            // Logic to try on the shirt
+            // Functionality to trigger try-on
+            selectShirt(shirt);
         });
 
         const addToCartButton = document.createElement('button');
         addToCartButton.textContent = 'Add to Cart';
         addToCartButton.addEventListener('click', () => {
-            // Logic to add the shirt to the cart
+            addToCart(shirt);
         });
 
         shirtItem.appendChild(shirtImg);
         shirtItem.appendChild(tryOnButton);
         shirtItem.appendChild(addToCartButton);
-
         shirtContainer.appendChild(shirtItem);
     });
 }
 
+function selectShirt(shirt) {
+    // Functionality to select shirt for try-on
+    console.log(`Selected shirt: ${shirt.name}`);
+    // Additional code to handle try-on
+}
+
+function addToCart(shirt) {
+    const cartItems = document.getElementById('cart-items');
+    const cartItem = document.createElement('li');
+    cartItem.textContent = `${shirt.name} - ${shirt.price}`;
+    cartItems.appendChild(cartItem);
+}
+
+// Fetch shirts on page load
 fetchShirts();
