@@ -125,6 +125,18 @@ if menu_choice == "Cart":
     else:
         st.sidebar.write("Your cart is empty.")
 
+# Display webcam stream for virtual try-on at the top
+if 'selected_shirt' in st.session_state:
+    st.markdown("# Virtual Try-On")
+    webrtc_streamer(
+        key="example",
+        video_processor_factory=VideoProcessor,
+        rtc_configuration=RTCConfiguration(
+            {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+        ),
+    )
+    logging.debug("WebRTC streamer initialized.")
+
 # Display shirt gallery in three columns
 st.markdown("# Shirt Gallery")
 
@@ -145,17 +157,6 @@ for row in range(num_rows):
             if col.button("Add to Cart", key=f"add_to_cart_{shirt_index}"):
                 st.session_state['cart'].append(shirt)
                 st.success(f"Added {shirt['image']} to cart!")
-
-if 'selected_shirt' in st.session_state:
-    st.markdown("# Virtual Try-On")
-    webrtc_streamer(
-        key="example",
-        video_processor_factory=VideoProcessor,
-        rtc_configuration=RTCConfiguration(
-            {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-        ),
-    )
-    logging.debug("WebRTC streamer initialized.")
 
 def try_on_shirt(shirt_index):
     st.experimental_set_query_params(shirt=shirt_index)
