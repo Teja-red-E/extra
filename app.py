@@ -119,7 +119,7 @@ menu_choice = st.sidebar.selectbox("Menu", menu_options)
 
 if menu_choice == "Sign in/Sign up":
     st.sidebar.markdown("## Click here")
-    st.sidebar.write("New user? Sign in Already have an acc? Sign up")
+    st.sidebar.write("New user? Sign in\nAlready have an acc? Sign up")
 
 if menu_choice == "About Us":
     st.sidebar.markdown("## About Us")
