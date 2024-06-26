@@ -44,28 +44,8 @@ body {
     background-color: #555;
 }
 
-.sidebar .dropdown {
-    position: relative;
-}
-
-.sidebar .dropdown .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #444;
-    min-width: 160px;
-    z-index: 1;
-}
-
-.sidebar .dropdown .dropdown-content a {
-    color: white;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-}
-
-.sidebar .dropdown:hover .dropdown-content {
-    display: block;
+.sidebar #about, .sidebar #cart {
+    margin-top: 20px;
 }
 
 .main-content {
