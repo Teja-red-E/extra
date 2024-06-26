@@ -3,36 +3,54 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    padding: 20px;
-    margin: 0;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 0;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
     padding: 0;
     margin: 0;
+    display: flex;
 }
 
-nav ul li {
-    margin: 0 15px;
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    position: fixed;
+    height: 100%;
 }
 
-nav ul li a {
-    color: #fff;
+.sidebar h2 {
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 10px 0;
+}
+
+.sidebar ul li a {
+    color: white;
     text-decoration: none;
-    font-weight: bold;
+    display: block;
+    padding: 10px;
+    background-color: #444;
+    border-radius: 5px;
 }
 
-.section {
-    margin: 20px 0;
+.sidebar ul li a:hover {
+    background-color: #555;
+}
+
+.sidebar #about, .sidebar #cart {
+    margin-top: 20px;
+}
+
+.main-content {
+    margin-left: 220px; /* Adjust based on sidebar width */
+    padding: 20px;
+    flex: 1;
 }
 
 .shirt-container {
@@ -58,18 +76,6 @@ nav ul li a {
     border-radius: 5px;
 }
 
-.shirt-item button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.shirt-item button:hover {
-    background-color: #0056b3;
+#try-on {
+    margin-top: 20px;
 }
