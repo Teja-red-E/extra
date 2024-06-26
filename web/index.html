@@ -7,29 +7,30 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#try-on">Try-On</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#cart">Cart</a></li>
-                <li><a href="#about">About Us</a></li>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#cart">Cart</a></li>
+        </ul>
+        <div id="about">
+            <h3>About Us</h3>
+            <p>Charan</p>
+        </div>
+        <div id="cart">
+            <h3>Cart</h3>
+            <ul id="cart-items">
+                <!-- Cart items will be dynamically loaded here -->
             </ul>
-        </nav>
-    </header>
-    <div id="try-on" class="section">
+        </div>
+    </div>
+    <div class="main-content">
         <div class="shirt-container">
             <!-- Shirt images will be dynamically loaded here -->
         </div>
-    </div>
-    <div id="gallery" class="section">
-        <!-- Gallery content -->
-    </div>
-    <div id="cart" class="section">
-        <!-- Cart content -->
-    </div>
-    <div id="about" class="section">
-        <p>About Us: Charan</p>
+        <div id="try-on">
+            <!-- Webcam stream and try-on functionality will be here -->
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
