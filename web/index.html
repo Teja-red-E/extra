@@ -7,41 +7,30 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="menu-bar">
-        <ul>
-            <li><a href="#" id="about-us">About Us</a></li>
-            <li><a href="#" id="cart">Cart (<span id="cart-count">0</span>)</a></li>
-            <li><a href="#" id="login-signup">Login/Signup</a></li>
-        </ul>
-    </div>
-
-    <!-- Modal for Login/Signup -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Login/Signup</h2>
-            <!-- Form for login/signup -->
-            <form id="login-form">
-                <label for="username">Username:</label><br>
-                <input type="text" id="username" name="username" required><br>
-                <label for="password">Password:</label><br>
-                <input type="password" id="password" name="password" required><br><br>
-                <button type="submit">Login</button>
-                <button type="button" id="signup-button">Sign Up</button>
-            </form>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#try-on">Try-On</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#cart">Cart</a></li>
+                <li><a href="#about">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div id="try-on" class="section">
+        <div class="shirt-container">
+            <!-- Shirt images will be dynamically loaded here -->
         </div>
     </div>
-
-    <div class="shirt-container">
-        <!-- Shirt images will be dynamically loaded here -->
+    <div id="gallery" class="section">
+        <!-- Gallery content -->
     </div>
-
-    <!-- Cart summary and buy option -->
-    <div class="cart-summary">
-        <p>Total: ₹<span id="cart-total">0</span></p>
-        <button id="buy-button">Buy</button>
+    <div id="cart" class="section">
+        <!-- Cart content -->
     </div>
-
+    <div id="about" class="section">
+        <p>About Us: Charan</p>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
