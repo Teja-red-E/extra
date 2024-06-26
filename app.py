@@ -115,13 +115,15 @@ menu_choice = st.sidebar.selectbox("Menu", menu_options)
 
 if menu_choice == "About Us":
     st.sidebar.markdown("## About Us")
-    st.sidebar.write("Charan")
+    st.sidebar.write("This is a small web app developed by college students of amity for the working of the virtual trail room")
 
 if menu_choice == "Cart":
     st.sidebar.markdown("## Cart")
     if st.session_state['cart']:
         for item in st.session_state['cart']:
             st.sidebar.write(f"Item: {item['image']}, Price: {item['price']}")
+        st.sidebar.write(f"Total: {calculate_cart_total()}")
+
     else:
         st.sidebar.write("Your cart is empty.")
 
