@@ -15,6 +15,7 @@ body {
     padding: 15px;
     position: fixed;
     height: 100%;
+    overflow-y: auto; /* Enable scrolling if needed */
 }
 
 .sidebar h2 {
@@ -53,6 +54,15 @@ body {
     flex: 1;
 }
 
+h1 {
+    margin-top: 0; /* Ensure title is at the top */
+    text-align: center;
+}
+
+#try-on {
+    margin-top: 20px;
+}
+
 .shirt-container {
     display: flex;
     flex-wrap: wrap;
@@ -76,6 +86,17 @@ body {
     border-radius: 5px;
 }
 
-#try-on {
-    margin-top: 20px;
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
