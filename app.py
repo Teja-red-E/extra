@@ -114,8 +114,12 @@ class VideoProcessor:
 st.title("Virtual Dress Try-On with Webcam")
 
 # Create the menu bar
-menu_options = ["About Us", "Cart"]
+menu_options = ["Sign in/Sign up", "About Us", "Cart"]
 menu_choice = st.sidebar.selectbox("Menu", menu_options)
+
+if menu_choice == "Sign in/Sign up":
+    st.sidebar.markdown("## Click here")
+    st.sidebar.write("New user? Sign in Already have an acc? Sign up")
 
 if menu_choice == "About Us":
     st.sidebar.markdown("## About Us")
