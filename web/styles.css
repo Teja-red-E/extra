@@ -44,7 +44,7 @@ body {
     background-color: #555;
 }
 
-.sidebar #about, .sidebar #cart {
+.sidebar #about, .sidebar #cart, .sidebar #click {
     margin-top: 20px;
 }
 
