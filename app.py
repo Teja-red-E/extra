@@ -110,53 +110,52 @@ class VideoProcessor:
 st.title("Virtual Dress Try-On with Webcam")
 
 # Create the menu bar
-menu_options = ["Try-On", "Gallery", "Cart", "About Us"]
+menu_options = ["About Us", "Cart"]
 menu_choice = st.sidebar.selectbox("Menu", menu_options)
 
-if menu_choice == "Try-On":
-    if 'selected_shirt' in st.session_state:
-        st.markdown("# Virtual Try-On")
-        webrtc_streamer(
-            key="example",
-            video_processor_factory=VideoProcessor,
-            rtc_configuration=RTCConfiguration(
-                {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
-            ),
-        )
-        logging.debug("WebRTC streamer initialized.")
+if menu_choice == "About Us":
+    st.sidebar.markdown("## About Us")
+    st.sidebar.write("Charan")
 
-elif menu_choice == "Gallery":
-    st.markdown("# Shirt Gallery")
-
-    # Calculate number of rows and columns for grid display
-    num_cols = 3
-    num_rows = (len(shirt_info) + num_cols - 1) // num_cols
-
-    # Distribute shirts evenly across columns
-    for row in range(num_rows):
-        cols = st.columns(num_cols)
-        for col, shirt_index in zip(cols, range(row * num_cols, (row + 1) * num_cols)):
-            if shirt_index < len(shirt_info):
-                shirt = shirt_info[shirt_index]
-                col.image(os.path.join(shirt_path, shirt["image"]), caption=f"{shirt['price']}", width=200)
-                if col.button("Try On", key=f"try_on_{shirt_index}"):
-                    st.session_state['selected_shirt'] = shirt_index
-                    st.experimental_rerun()
-                if col.button("Add to Cart", key=f"add_to_cart_{shirt_index}"):
-                    st.session_state['cart'].append(shirt)
-                    st.success(f"Added {shirt['image']} to cart!")
-
-elif menu_choice == "Cart":
-    st.markdown("# Cart")
+if menu_choice == "Cart":
+    st.sidebar.markdown("## Cart")
     if st.session_state['cart']:
         for item in st.session_state['cart']:
-            st.write(f"Item: {item['image']}, Price: {item['price']}")
+            st.sidebar.write(f"Item: {item['image']}, Price: {item['price']}")
     else:
-        st.write("Your cart is empty.")
+        st.sidebar.write("Your cart is empty.")
 
-elif menu_choice == "About Us":
-    st.markdown("# About Us")
-    st.write("Charan")
+# Display shirt gallery in three columns
+st.markdown("# Shirt Gallery")
+
+# Calculate number of rows and columns for grid display
+num_cols = 3
+num_rows = (len(shirt_info) + num_cols - 1) // num_cols
+
+# Distribute shirts evenly across columns
+for row in range(num_rows):
+    cols = st.columns(num_cols)
+    for col, shirt_index in zip(cols, range(row * num_cols, (row + 1) * num_cols)):
+        if shirt_index < len(shirt_info):
+            shirt = shirt_info[shirt_index]
+            col.image(os.path.join(shirt_path, shirt["image"]), caption=f"{shirt['price']}", width=200)
+            if col.button("Try On", key=f"try_on_{shirt_index}"):
+                st.session_state['selected_shirt'] = shirt_index
+                st.experimental_rerun()
+            if col.button("Add to Cart", key=f"add_to_cart_{shirt_index}"):
+                st.session_state['cart'].append(shirt)
+                st.success(f"Added {shirt['image']} to cart!")
+
+if 'selected_shirt' in st.session_state:
+    st.markdown("# Virtual Try-On")
+    webrtc_streamer(
+        key="example",
+        video_processor_factory=VideoProcessor,
+        rtc_configuration=RTCConfiguration(
+            {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+        ),
+    )
+    logging.debug("WebRTC streamer initialized.")
 
 def try_on_shirt(shirt_index):
     st.experimental_set_query_params(shirt=shirt_index)
