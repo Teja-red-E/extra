@@ -8,7 +8,7 @@ async function fetchShirts() {
     const shirtContainer = document.querySelector('.shirt-container');
     shirtContainer.innerHTML = '';
 
-    shirts.forEach(shirt => {
+    shirts.forEach((shirt, index) => {
         const shirtItem = document.createElement('div');
         shirtItem.classList.add('shirt-item');
 
@@ -19,14 +19,13 @@ async function fetchShirts() {
         const tryOnButton = document.createElement('button');
         tryOnButton.textContent = 'Try On';
         tryOnButton.addEventListener('click', () => {
-            // Functionality to trigger try-on
-            selectShirt(shirt);
+            selectShirt(index);
         });
 
         const addToCartButton = document.createElement('button');
         addToCartButton.textContent = 'Add to Cart';
         addToCartButton.addEventListener('click', () => {
-            addToCart(shirt);
+            addToCart(index);
         });
 
         shirtItem.appendChild(shirtImg);
@@ -36,16 +35,16 @@ async function fetchShirts() {
     });
 }
 
-function selectShirt(shirt) {
+function selectShirt(shirtIndex) {
     // Functionality to select shirt for try-on
-    console.log(`Selected shirt: ${shirt.name}`);
+    console.log(`Selected shirt: ${shirt_info[shirtIndex].name}`);
     // Additional code to handle try-on
 }
 
-function addToCart(shirt) {
+function addToCart(shirtIndex) {
     const cartItems = document.getElementById('cart-items');
     const cartItem = document.createElement('li');
-    cartItem.textContent = `${shirt.name} - ${shirt.price}`;
+    cartItem.textContent = `${shirt_info[shirtIndex].name} - ${shirt_info[shirtIndex].price}`;
     cartItems.appendChild(cartItem);
 }
 
