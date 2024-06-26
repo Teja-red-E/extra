@@ -20,12 +20,12 @@ if not os.path.exists(shirt_path):
 
 # Define shirt information (image filenames and prices)
 shirt_info = [
-    {"image": "Blue T-Shirt.png", "price": "₹500"},
-    {"image": "Green T-Shirt.png", "price": "₹750"},
-    {"image": "Red T-Shirt.png", "price": "₹600"},
-    {"image": "Ocean Blue T-Shirt.png", "price": "₹500"},
-    {"image": "Pink T-Shirt", "price.png": "₹750"},
-    {"image": "Deep Blue T-Shirt", "price.png": "₹600"},
+   {"image": "1.png", "price": "₹500"},
+    {"image": "2.png", "price": "₹750"},
+    {"image": "3.png", "price": "₹600"},
+    {"image": "4.png", "price": "₹500"},
+    {"image": "5.png", "price": "₹750"},
+    {"image": "6.png", "price": "₹600"},
 ]
 
 # Initialize pose detector
